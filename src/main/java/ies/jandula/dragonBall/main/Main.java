@@ -2,8 +2,6 @@ package ies.jandula.dragonBall.main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -19,19 +17,19 @@ public class Main
         String archivo = "src" + File.separator + "main" + File.separator + "resources" + File.separator+ "DragonBall.csv";
 
         File file = new File(archivo);
-        
+                
         try
-        {        	
-            Scanner scanner = new Scanner(file);
+        {       
+            Scanner scanner = new Scanner(file);            
             
-            Map<String,DragonBall>mapaSaga = new TreeMap<String, DragonBall>();
+            scanner.nextLine();
             
-            Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();
+            Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();      
             
             while (scanner.hasNextLine())
-            {
-            	String linea = scanner.nextLine() ;
+            {     
             	
+            	String linea = scanner.nextLine() ;            	
             	            
                 Pattern lineaSimple = Pattern.compile("^([A-Za-z ()\\'\\-\\\"]+),([0-9]+),([A-Za-z ]+),([A-Za-z ]+)$");
                 Matcher matcherLineaSimple = lineaSimple.matcher(linea);
@@ -134,10 +132,17 @@ public class Main
                 	String series = matcherLineaSimple.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderPunto.matches())
                 {
@@ -151,10 +156,16 @@ public class Main
                 	String series = matcherLineaPoderPunto.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                    
+                    if (!mapaSeries.containsKey(series))
+                    {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                    mapaSaga.put(sagaMovie, dragonBall);                                	
 
                 }
              	else if (matcherLineaComillaPrincipio.matches())
@@ -169,11 +180,17 @@ public class Main
                 	String series = matcherLineaComillaPrincipio.group(4);                	
                 	 
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajeExclamacion.matches())
              	{
@@ -186,11 +203,18 @@ public class Main
                 	String series = matcherLineaPersonajeExclamacion.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
-             	}
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
              	else if(matcherLineaPersonajeBarra.matches())
              	{
              		String personaje = matcherLineaPersonajeBarra.group(1);
@@ -202,11 +226,18 @@ public class Main
                 	String series = matcherLineaPersonajeBarra.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
-             	}
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
              	else if(matcherLineaPersonajeNumero.matches())
                 {
                 	String personaje = matcherLineaPersonajeNumero.group(1);
@@ -218,10 +249,17 @@ public class Main
                 	String series = matcherLineaPersonajeNumero.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajeNumero2.matches())
                 {
@@ -234,10 +272,17 @@ public class Main
                 	String series = matcherLineaPersonajeNumero2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajeNumero3.matches())
                 {
@@ -250,10 +295,17 @@ public class Main
                 	String series = matcherLineaPersonajeNumero3.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajePorcentaje.matches())
                 {
@@ -266,10 +318,17 @@ public class Main
                 	String series = matcherLineaPersonajePorcentaje.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajePorcentaje2.matches())
                 {
@@ -282,10 +341,17 @@ public class Main
                 	String series = matcherLineaPersonajePorcentaje2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajePorcentaje3.matches())
                 {
@@ -298,10 +364,17 @@ public class Main
                 	String series = matcherLineaPersonajePorcentaje3.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajePorcentaje4.matches())
                 {
@@ -314,10 +387,17 @@ public class Main
                 	String series = matcherLineaPersonajePorcentaje4.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if(matcherLineaPersonajeletraNumero.matches())
                 {
@@ -330,10 +410,17 @@ public class Main
                 	String series = matcherLineaPersonajeletraNumero.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaPunto.matches())
                 {
@@ -347,11 +434,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaPunto.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);    	
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderComa.matches())
                 {
@@ -365,11 +458,17 @@ public class Main
                 	String series = matcherLineaPoderComa.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);   	
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderComaMil.matches())
                 {
@@ -383,11 +482,17 @@ public class Main
                 	String series = matcherLineaPoderComaMil.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);    	
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaBarra.matches())
                 {
@@ -401,11 +506,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaBarra.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaBarra2.matches())
                 {
@@ -419,11 +530,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaBarra2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaBarra3.matches())
                 {
@@ -437,11 +554,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaBarra3.group(4);
                 	                	                	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderNumeroSagaPeliculaBarra.matches())
                 {
@@ -455,11 +578,17 @@ public class Main
                 	String series = matcherLineaPoderNumeroSagaPeliculaBarra.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaRaya.matches())
                 {
@@ -473,11 +602,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaRaya.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaNumero.matches())
                 {
@@ -491,11 +626,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaNumero.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaNumero2.matches())
                 {
@@ -509,12 +650,18 @@ public class Main
                 	String series = matcherLineaSagaPeliculaNumero2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
-                } 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
              	else if (matcherLineaSagaPeliculaNumero3.matches())
                 {
                 	
@@ -527,11 +674,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaNumero3.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaNumero4.matches())
                 {
@@ -545,10 +698,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaNumero4.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
+
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderNumeroSagaPeliculaDosPuntos.matches())
                 {
@@ -562,11 +722,17 @@ public class Main
                 	String series = matcherLineaPoderNumeroSagaPeliculaDosPuntos.group(4);                	
                 	 
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderNumeroSagaPeliculaDosPuntos2.matches())
                 {
@@ -580,12 +746,18 @@ public class Main
                 	String series = matcherLineaPoderNumeroSagaPeliculaDosPuntos2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
-                }  
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                } 
              	else if (matcherLineaSagaPeliculaExclamacion.matches())
                 {
                 	
@@ -598,11 +770,17 @@ public class Main
                 	String series = matcherLineaSagaPeliculaExclamacion.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaSagaPeliculaExclamacion2.matches())
                 {
@@ -616,12 +794,18 @@ public class Main
                 	String series = matcherLineaSagaPeliculaExclamacion2.group(4);
                 	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
 
-                } 
+                     
+                    if (!mapaSeries.containsKey(series)) {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
              	else if (matcherLineaSagaPeliculaExclamacion3.matches())
                 {
                 	
@@ -634,12 +818,18 @@ public class Main
                 	String series = matcherLineaSagaPeliculaExclamacion3.group(4);       
                 	                	
                 	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
-                	
-                	mapaSaga.put(sagaMovie, dragonBall);
-                	
-                	mapaSeries.put(series,mapaSaga);
-
-                }                 
+                     
+                    if (!mapaSeries.containsKey(series)) 
+                    {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+                    
+                    
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+                    
+                     
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }                
                 else
                 {
                 	System.out.println("Expresion a cambiar: "+linea);
@@ -647,22 +837,38 @@ public class Main
            
             }      
             
-            System.out.println("Numero de series: "+mapaSeries.keySet().size()+"("+mapaSeries.keySet()+")");
-                        
-            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet()) 
-            {
-              String serie = entrada.getKey();
-              int numSagas = entrada.getValue().size(); 
+            System.out.println("Numero de series: " + mapaSeries.keySet().size() + "(" + mapaSeries.keySet() + ")");
 
-              System.out.println("Serie: " + serie);
-              
-              for (Map.Entry<String, DragonBall> saga : entrada.getValue().entrySet()) 
-              {
-                System.out.println("Numero de sagas: "+numSagas+"("+saga.getKey()+")");
-              }
+            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet()) {
+                String serie = entrada.getKey();
+                int numSagas = entrada.getValue().size(); 
+
+                System.out.println(serie);
+                
+                System.out.println("Número de sagas: " + numSagas);
+                
+                for (Map.Entry<String, DragonBall> saga : entrada.getValue().entrySet()) {
+                    String nombreSaga = saga.getKey();
+                    
+                    String personajeMasPoderoso = "";
+                    long poderMasFuerte = 0;
+                    
+                    for (Map.Entry<String, DragonBall> personaje : entrada.getValue().entrySet()) 
+                    {
+                        long poderActual = Long.parseLong(personaje.getValue().getPowerLevel().replaceAll("[\",]", ""));                        
+                        
+                        if (poderActual > poderMasFuerte) 
+                        {
+                            poderMasFuerte = poderActual;
+                            personajeMasPoderoso = personaje.getValue().getCharacter();
+                        }
+                    }
+                    
+                    System.out.println("Personaje más poderoso en " + nombreSaga + ": " + personajeMasPoderoso + " (" + poderMasFuerte + ")");
+                }
             }
-            
-            scanner.close();                     
+
+            scanner.close();                   
 
         } 
         catch (FileNotFoundException fileNotFoundException) 
