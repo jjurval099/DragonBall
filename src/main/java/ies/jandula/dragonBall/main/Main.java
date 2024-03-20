@@ -839,34 +839,47 @@ public class Main
             
             System.out.println("Numero de series: " + mapaSeries.keySet().size() + "(" + mapaSeries.keySet() + ")");
 
-            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet()) {
+            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet())
+            {
                 String serie = entrada.getKey();
                 int numSagas = entrada.getValue().size(); 
 
                 System.out.println(serie);
-                
+
                 System.out.println("Número de sagas: " + numSagas);
-                
-                for (Map.Entry<String, DragonBall> saga : entrada.getValue().entrySet()) {
+
+                for (Map.Entry<String, DragonBall> saga : entrada.getValue().entrySet())
+                {
                     String nombreSaga = saga.getKey();
-                    
-                    String personajeMasPoderoso = "";
-                    long poderMasFuerte = 0;
-                    
-                    for (Map.Entry<String, DragonBall> personaje : entrada.getValue().entrySet()) 
+
+                    String personajeMasPoderoso = null;
+                    String personajeMasDebil = null;
+
+                    long poderMasFuerte = Long.MIN_VALUE;
+                    long poderMasDebil = Long.MAX_VALUE;
+
+                    for (Map.Entry<String, DragonBall> personaje : entrada.getValue().entrySet())
                     {
-                        long poderActual = Long.parseLong(personaje.getValue().getPowerLevel().replaceAll("[\",]", ""));                        
-                        
+                        long poderActual = Long.parseLong(personaje.getValue().getPowerLevel().replaceAll("[\",]", "")); 
+
                         if (poderActual > poderMasFuerte) 
                         {
                             poderMasFuerte = poderActual;
                             personajeMasPoderoso = personaje.getValue().getCharacter();
                         }
+                        
+                        if (poderActual < poderMasDebil) 
+                        {
+                            poderMasDebil = poderActual;
+                            personajeMasDebil = personaje.getValue().getCharacter();
+                        }
                     }
                     
                     System.out.println("Personaje más poderoso en " + nombreSaga + ": " + personajeMasPoderoso + " (" + poderMasFuerte + ")");
+                    System.out.println("Personaje menos poderoso en " + nombreSaga + ": " + personajeMasDebil + " (" + poderMasDebil + ")");
                 }
             }
+
 
             scanner.close();                   
 
@@ -877,3 +890,6 @@ public class Main
         }
     }
 }
+
+//System.out.println("Personaje más poderoso en " + nombreSaga + ": " + personajeMasPoderoso + " (" + poderMasFuerte + ")"+ personajeMasDebil + " (" + poderMasDebil + ")");
+                
