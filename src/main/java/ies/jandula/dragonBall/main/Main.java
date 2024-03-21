@@ -21,9 +21,7 @@ public class Main
         try
         {       
             Scanner scanner = new Scanner(file);            
-            
-            scanner.nextLine();
-            
+                        
             Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();      
             
             while (scanner.hasNextLine())
@@ -842,46 +840,52 @@ public class Main
             for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet())
             {
                 String serie = entrada.getKey();
-                int numSagas = entrada.getValue().size(); 
-
+                int numSagas = entrada.getValue().size();
+                
+                Map<String, DragonBall> mapaSaga = entrada.getValue() ;
+                
                 System.out.println(serie);
 
-                System.out.println("Número de sagas: " + numSagas);
-
-                for (Map.Entry<String, DragonBall> saga : entrada.getValue().entrySet())
+                System.out.println("Número de sagas: " + numSagas);                                
+                
+                String personajeMasPoderoso = "";
+                String personajeMasDebil = "";
+                
+                float poderMasFuerte = 0;
+                float poderMasDebil = 0;
+                
+                for (Map.Entry<String, DragonBall> saga : mapaSaga.entrySet())
                 {
                     String nombreSaga = saga.getKey();
+                    DragonBall personaje = saga.getValue() ;
 
-                    String personajeMasPoderoso = null;
-                    String personajeMasDebil = null;
+                    float poderActual = Float.parseFloat(personaje.getPowerLevel().replaceAll("[\",]", "")); 
 
-                    long poderMasFuerte = Long.MIN_VALUE;
-                    long poderMasDebil = Long.MAX_VALUE;
-
-                    for (Map.Entry<String, DragonBall> personaje : entrada.getValue().entrySet())
+                    if(poderMasDebil==0 && poderMasFuerte==0)
                     {
-                        long poderActual = Long.parseLong(personaje.getValue().getPowerLevel().replaceAll("[\",]", "")); 
-
-                        if (poderActual > poderMasFuerte) 
-                        {
-                            poderMasFuerte = poderActual;
-                            personajeMasPoderoso = personaje.getValue().getCharacter();
-                        }
-                        
-                        if (poderActual < poderMasDebil) 
-                        {
-                            poderMasDebil = poderActual;
-                            personajeMasDebil = personaje.getValue().getCharacter();
-                        }
+                    	poderMasDebil=poderActual;
+                    	poderMasFuerte=poderActual;                    	
+                    	
                     }
                     
-                    System.out.println("Personaje más poderoso en " + nombreSaga + ": " + personajeMasPoderoso + " (" + poderMasFuerte + ")");
-                    System.out.println("Personaje menos poderoso en " + nombreSaga + ": " + personajeMasDebil + " (" + poderMasDebil + ")");
+                    if (poderActual > poderMasFuerte) 
+                    {
+                        poderMasFuerte = poderActual;
+                        personajeMasPoderoso = personaje.getCharacter();
+                    }
+                    
+                    if (poderActual < poderMasDebil) 
+                    {
+                        poderMasDebil = poderActual;
+                        personajeMasDebil = personaje.getCharacter();
+                    }                    
+                    
+                	System.out.println("- Personaje destacados en: " + nombreSaga + ": " + personajeMasPoderoso + ("poderMasFuerte + ")+ personajeMasDebil + "(" + poderMasDebil +")");
+                    
                 }
+                
             }
-
-
-            scanner.close();                   
+            scanner.close();               
 
         } 
         catch (FileNotFoundException fileNotFoundException) 
@@ -891,5 +895,4 @@ public class Main
     }
 }
 
-//System.out.println("Personaje más poderoso en " + nombreSaga + ": " + personajeMasPoderoso + " (" + poderMasFuerte + ")"+ personajeMasDebil + " (" + poderMasDebil + ")");
                 
