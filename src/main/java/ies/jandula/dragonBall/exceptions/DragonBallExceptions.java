@@ -3,6 +3,9 @@ package ies.jandula.dragonBall.exceptions;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Juan Jurado
+ */
 public class DragonBallExceptions extends Exception
 {
 	/** Atributo - Código */

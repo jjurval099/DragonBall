@@ -17,10 +17,19 @@ import java.util.regex.Pattern;
 import ies.jandula.dragonBall.exceptions.DragonBallExceptions;
 import ies.jandula.dragonBall.models.DragonBall;
 
+/**
+ * @author Juan Jurado
+ */
 public class Main 
 {
+	/** 
+	 * @param args
+	 * @throws IOException
+	 * @throws DragonBallExceptions
+	 */
     public static void main(String[] args) throws IOException, DragonBallExceptions 
     {
+    	
         String archivo = "src" + File.separator + "main" + File.separator + "resources" + File.separator+ "DragonBall.csv";
 
         File file = new File(archivo);
