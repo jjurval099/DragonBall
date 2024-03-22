@@ -29,34 +29,42 @@ public class Main
 	 */
     public static void main(String[] args) throws IOException, DragonBallExceptions 
     {
-    	
-        String archivo = "src" + File.separator + "main" + File.separator + "resources" + File.separator+ "DragonBall.csv";
+    	// Se define la ruta del archivo "DragonBall.csv" en el sistema de archivos
+    	String archivo = "src" + File.separator + "main" + File.separator + "resources" + File.separator+ "DragonBall.csv";
 
-        File file = new File(archivo);
-        
-        FileWriter fileWriter = null;
-        
-        PrintWriter printWriter = null;
-        
-        Scanner scanner = null;
-                
-        try
-        {       
-        	fileWriter = new FileWriter("ejercicioDragonBall.txt");
-            
-            printWriter = new PrintWriter(fileWriter);
-            
-            scanner = new Scanner(file);            
-                        
-            Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();  
-            
-            scanner.nextLine();
+    	File file = new File(archivo);
+
+    	FileWriter fileWriter = null;
+    	PrintWriter printWriter = null;
+
+    	Scanner scanner = null;
+
+    	try 
+    	{
+    	    // Se crea un FileWriter para escribir en el archivo "ejercicioDragonBall.txt"
+    	    fileWriter = new FileWriter("ejercicioDragonBall.txt");
+
+    	    // Se crea un PrintWriter que se asocia con el FileWriter para escribir datos en el txt ejercicioDrangonBall
+    	    printWriter = new PrintWriter(fileWriter);
+
+    	    // Scanner  para leer el contenido del fichero CSV
+    	    scanner = new Scanner(file);
+
+    	    // Mapa que guardara la información leída del fichero CSV
+    	    Map<String, Map<String, DragonBall>> mapaSeries = new TreeMap<String, Map<String, DragonBall>>();  
+
+    	    // Se omite la primera línea del fihero que  contiene el encabezado de la columna
+    	    scanner.nextLine();
             
             while (scanner.hasNextLine())
             {     
             	
             	String linea = scanner.nextLine() ;            	
             	            
+            	/**
+            	 *  Patrones de expresión regular que coincide con líneas de texto con formato general.
+            	 */
+            	
                 Pattern lineaSimple = Pattern.compile("^([A-Za-z ()\\'\\-\\\"]+),([0-9]+),([A-Za-z ]+),([A-Za-z ]+)$");
                 Matcher matcherLineaSimple = lineaSimple.matcher(linea);
                 
@@ -147,449 +155,465 @@ public class Main
                 Pattern lineaSagaPeliculaExclamacion3 = Pattern.compile("^([A-Za-z0-9 ()\\'\\-\\.\\,]+),(\\\"[0,0-9,9]+\\\"),([A-Za-z \\!\\:\\.\\/\\']+),([A-Za-z ]+)$");
                 Matcher matcherLineaSagaPeliculaExclamacion3 = lineaSagaPeliculaExclamacion3.matcher(linea);
                                 
-                if(matcherLineaSimple.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea simple
+                if (matcherLineaSimple.matches())
                 {
-                	String personaje = matcherLineaSimple.group(1);
-                	
-                	String power = matcherLineaSimple.group(2);
-                	
-                	String sagaMovie = matcherLineaSimple.group(3);
-                	
-                	String series = matcherLineaSimple.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaSimple.group(1);
+                    String power = matcherLineaSimple.group(2);
+                    String sagaMovie = matcherLineaSimple.group(3);
+                    String series = matcherLineaSimple.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
-                        mapaSeries.put(series, new TreeMap<>());
-                    }
-                    
-                    
-                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
-                    mapaSaga.put(sagaMovie, dragonBall);
-                }
-             	else if (matcherLineaPoderPunto.matches())
-                {
-                	
-             		String personaje = matcherLineaPoderPunto.group(1);
-                	
-                	String power = matcherLineaPoderPunto.group(2);
-                	
-                	String sagaMovie = matcherLineaPoderPunto.group(3);
-                	
-                	String series = matcherLineaPoderPunto.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                    
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
                     if (!mapaSeries.containsKey(series))
                     {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                    mapaSaga.put(sagaMovie, dragonBall);                                	
 
+                    // Obtiene el mapa de personajes para la serie actual
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
+                    mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaComillaPrincipio.matches())
+
+             // Verifica si la línea coincide con el patrón de expresión regular para una línea con el formato de poder con punto
+                else if (matcherLineaPoderPunto.matches())
                 {
-                	
-         			String personaje = matcherLineaComillaPrincipio.group(1);
-                	
-                	String power = matcherLineaComillaPrincipio.group(2);
-                	
-                	String sagaMovie = matcherLineaComillaPrincipio.group(3);
-                	
-                	String series = matcherLineaComillaPrincipio.group(4);                	
-                	 
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPoderPunto.group(1);
+                    String power = matcherLineaPoderPunto.group(2);
+                    String sagaMovie = matcherLineaPoderPunto.group(3);
+                    String series = matcherLineaPoderPunto.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
-                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
-                    mapaSaga.put(sagaMovie, dragonBall);
-                }
-             	else if(matcherLineaPersonajeExclamacion.matches())
-             	{
-             		String personaje = matcherLineaPersonajeExclamacion.group(1);
-                	
-                	String power = matcherLineaPersonajeExclamacion.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeExclamacion.group(3);
-                	
-                	String series = matcherLineaPersonajeExclamacion.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
-                        mapaSeries.put(series, new TreeMap<>());
-                    }
-                    
-                    
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
-                    mapaSaga.put(sagaMovie, dragonBall);
-                }
-             	else if(matcherLineaPersonajeBarra.matches())
-             	{
-             		String personaje = matcherLineaPersonajeBarra.group(1);
-                	
-                	String power = matcherLineaPersonajeBarra.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeBarra.group(3);
-                	
-                	String series = matcherLineaPersonajeBarra.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
-                        mapaSeries.put(series, new TreeMap<>());
-                    }
-                    
-                    
-                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajeNumero.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con comillas al principio
+                else if (matcherLineaComillaPrincipio.matches()) 
                 {
-                	String personaje = matcherLineaPersonajeNumero.group(1);
-                	
-                	String power = matcherLineaPersonajeNumero.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeNumero.group(3);
-                	
-                	String series = matcherLineaPersonajeNumero.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaComillaPrincipio.group(1);
+                    String power = matcherLineaComillaPrincipio.group(2);
+                    String sagaMovie = matcherLineaComillaPrincipio.group(3);
+                    String series = matcherLineaComillaPrincipio.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajeNumero2.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye exclamaciones
+                else if (matcherLineaPersonajeExclamacion.matches()) 
                 {
-                	String personaje = matcherLineaPersonajeNumero2.group(1);
-                	
-                	String power = matcherLineaPersonajeNumero2.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeNumero2.group(3);
-                	
-                	String series = matcherLineaPersonajeNumero2.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeExclamacion.group(1);
+                    String power = matcherLineaPersonajeExclamacion.group(2);
+                    String sagaMovie = matcherLineaPersonajeExclamacion.group(3);
+                    String series = matcherLineaPersonajeExclamacion.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajeNumero3.matches())
-                {
-                	String personaje = matcherLineaPersonajeNumero3.group(1);
-                	
-                	String power = matcherLineaPersonajeNumero3.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeNumero3.group(3);
-                	
-                	String series = matcherLineaPersonajeNumero3.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+             // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye una barra (/) en el nombre
+                else if (matcherLineaPersonajeBarra.matches())
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeBarra.group(1);
+                    String power = matcherLineaPersonajeBarra.group(2);
+                    String sagaMovie = matcherLineaPersonajeBarra.group(3);
+                    String series = matcherLineaPersonajeBarra.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajePorcentaje.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un número en el nombre
+                else if (matcherLineaPersonajeNumero.matches())
                 {
-                	String personaje = matcherLineaPersonajePorcentaje.group(1);
-                	
-                	String power = matcherLineaPersonajePorcentaje.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajePorcentaje.group(3);
-                	
-                	String series = matcherLineaPersonajePorcentaje.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeNumero.group(1);
+                    String power = matcherLineaPersonajeNumero.group(2);
+                    String sagaMovie = matcherLineaPersonajeNumero.group(3);
+                    String series = matcherLineaPersonajeNumero.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajePorcentaje2.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un número y caracteres especiales en el nombre
+                else if (matcherLineaPersonajeNumero2.matches()) 
                 {
-                	String personaje = matcherLineaPersonajePorcentaje2.group(1);
-                	
-                	String power = matcherLineaPersonajePorcentaje2.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajePorcentaje2.group(3);
-                	
-                	String series = matcherLineaPersonajePorcentaje2.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeNumero2.group(1);
+                    String power = matcherLineaPersonajeNumero2.group(2);
+                    String sagaMovie = matcherLineaPersonajeNumero2.group(3);
+                    String series = matcherLineaPersonajeNumero2.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajePorcentaje3.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un número y caracteres especiales en el nombre
+                else if (matcherLineaPersonajeNumero3.matches())
                 {
-                	String personaje = matcherLineaPersonajePorcentaje3.group(1);
-                	
-                	String power = matcherLineaPersonajePorcentaje3.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajePorcentaje3.group(3);
-                	
-                	String series = matcherLineaPersonajePorcentaje3.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeNumero3.group(1);
+                    String power = matcherLineaPersonajeNumero3.group(2);
+                    String sagaMovie = matcherLineaPersonajeNumero3.group(3);
+                    String series = matcherLineaPersonajeNumero3.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajePorcentaje4.matches())
-                {
-                	String personaje = matcherLineaPersonajePorcentaje4.group(1);
-                	
-                	String power = matcherLineaPersonajePorcentaje4.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajePorcentaje4.group(3);
-                	
-                	String series = matcherLineaPersonajePorcentaje4.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+             // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un porcentaje (%) en el nombre
+                else if (matcherLineaPersonajePorcentaje.matches()) 
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajePorcentaje.group(1);
+                    String power = matcherLineaPersonajePorcentaje.group(2);
+                    String sagaMovie = matcherLineaPersonajePorcentaje.group(3);
+                    String series = matcherLineaPersonajePorcentaje.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if(matcherLineaPersonajeletraNumero.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un porcentaje (%) y un número en el nombre
+                else if (matcherLineaPersonajePorcentaje2.matches())
                 {
-                	String personaje = matcherLineaPersonajeletraNumero.group(1);
-                	
-                	String power = matcherLineaPersonajeletraNumero.group(2);
-                	
-                	String sagaMovie = matcherLineaPersonajeletraNumero.group(3);
-                	
-                	String series = matcherLineaPersonajeletraNumero.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajePorcentaje2.group(1);
+                    String power = matcherLineaPersonajePorcentaje2.group(2);
+                    String sagaMovie = matcherLineaPersonajePorcentaje2.group(3);
+                    String series = matcherLineaPersonajePorcentaje2.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaSagaPeliculaPunto.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un porcentaje (%) y dos números en el nombre
+                else if (matcherLineaPersonajePorcentaje3.matches()) 
                 {
-                	
-         			String personaje = matcherLineaSagaPeliculaPunto.group(1);
-                	
-                	String power = matcherLineaSagaPeliculaPunto.group(2);
-                	
-                	String sagaMovie = matcherLineaSagaPeliculaPunto.group(3);
-                	
-                	String series = matcherLineaSagaPeliculaPunto.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajePorcentaje3.group(1);
+                    String power = matcherLineaPersonajePorcentaje3.group(2);
+                    String sagaMovie = matcherLineaPersonajePorcentaje3.group(3);
+                    String series = matcherLineaPersonajePorcentaje3.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaPoderComa.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye un porcentaje (%) y tres números en el nombre
+                else if (matcherLineaPersonajePorcentaje4.matches()) 
                 {
-                	
-         			String personaje = matcherLineaPoderComa.group(1);
-                	
-                	String power = matcherLineaPoderComa.group(2);
-                	
-                	String sagaMovie = matcherLineaPoderComa.group(3);
-                	
-                	String series = matcherLineaPoderComa.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajePorcentaje4.group(1);
+                    String power = matcherLineaPersonajePorcentaje4.group(2);
+                    String sagaMovie = matcherLineaPersonajePorcentaje4.group(3);
+                    String series = matcherLineaPersonajePorcentaje4.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaPoderComaMil.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un personaje que incluye una letra y un número en el nombre
+                else if (matcherLineaPersonajeletraNumero.matches()) 
                 {
-                	
-         			String personaje = matcherLineaPoderComaMil.group(1);
-                	
-                	String power = matcherLineaPoderComaMil.group(2);
-                	
-                	String sagaMovie = matcherLineaPoderComaMil.group(3);
-                	
-                	String series = matcherLineaPoderComaMil.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPersonajeletraNumero.group(1);
+                    String power = matcherLineaPersonajeletraNumero.group(2);
+                    String sagaMovie = matcherLineaPersonajeletraNumero.group(3);
+                    String series = matcherLineaPersonajeletraNumero.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaSagaPeliculaBarra.matches())
-                {
-                	
-             		String personaje = matcherLineaSagaPeliculaBarra.group(1);
-                	
-                	String power = matcherLineaSagaPeliculaBarra.group(2);
-                	
-                	String sagaMovie = matcherLineaSagaPeliculaBarra.group(3);
-                	
-                	String series = matcherLineaSagaPeliculaBarra.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+             // Verifica si la línea coincide con el patrón de expresión regular para una línea con una saga o película que incluye un punto (.) en el nombre
+                else if (matcherLineaSagaPeliculaPunto.matches()) 
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaSagaPeliculaPunto.group(1);
+                    String power = matcherLineaSagaPeliculaPunto.group(2);
+                    String sagaMovie = matcherLineaSagaPeliculaPunto.group(3);
+                    String series = matcherLineaSagaPeliculaPunto.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaSagaPeliculaBarra2.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un poder que incluye una coma (,)
+                else if (matcherLineaPoderComa.matches()) 
                 {
-                	
-             		String personaje = matcherLineaSagaPeliculaBarra2.group(1);
-                	
-                	String power = matcherLineaSagaPeliculaBarra2.group(2);
-                	
-                	String sagaMovie = matcherLineaSagaPeliculaBarra2.group(3);
-                	
-                	String series = matcherLineaSagaPeliculaBarra2.group(4);
-                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPoderComa.group(1);
+                    String power = matcherLineaPoderComa.group(2);
+                    String sagaMovie = matcherLineaPoderComa.group(3);
+                    String series = matcherLineaPoderComa.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
-             	else if (matcherLineaSagaPeliculaBarra3.matches())
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con un poder que incluye una coma (,) y un punto (.) como separador de miles
+                else if (matcherLineaPoderComaMil.matches()) 
                 {
-                	
-             		String personaje = matcherLineaSagaPeliculaBarra3.group(1);
-                	
-                	String power = matcherLineaSagaPeliculaBarra3.group(2);
-                	
-                	String sagaMovie = matcherLineaSagaPeliculaBarra3.group(3);
-                	
-                	String series = matcherLineaSagaPeliculaBarra3.group(4);
-                	                	                	
-                	DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaPoderComaMil.group(1);
+                    String power = matcherLineaPoderComaMil.group(2);
+                    String sagaMovie = matcherLineaPoderComaMil.group(3);
+                    String series = matcherLineaPoderComaMil.group(4);
 
-                     
-                    if (!mapaSeries.containsKey(series)) {
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
                         mapaSeries.put(series, new TreeMap<>());
                     }
-                    
-                    
+
+                    // Obtiene el mapa de personajes para la serie actual
                     Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
-                    
-                     
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
+
+             // Verifica si la línea coincide con el patrón de expresión regular para una línea con una saga o película que incluye una barra (/) en el nombre
+                else if (matcherLineaSagaPeliculaBarra.matches())
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaSagaPeliculaBarra.group(1);
+                    String power = matcherLineaSagaPeliculaBarra.group(2);
+                    String sagaMovie = matcherLineaSagaPeliculaBarra.group(3);
+                    String series = matcherLineaSagaPeliculaBarra.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+
+                    // Obtiene el mapa de personajes para la serie actual
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con una saga o película que incluye una barra (/) en el nombre (variante)
+                else if (matcherLineaSagaPeliculaBarra2.matches())
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaSagaPeliculaBarra2.group(1);
+                    String power = matcherLineaSagaPeliculaBarra2.group(2);
+                    String sagaMovie = matcherLineaSagaPeliculaBarra2.group(3);
+                    String series = matcherLineaSagaPeliculaBarra2.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series))
+                    {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+
+                    // Obtiene el mapa de personajes para la serie actual
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
+                    mapaSaga.put(sagaMovie, dragonBall);
+                }
+                // Verifica si la línea coincide con el patrón de expresión regular para una línea con una saga o película que incluye una barra (/) en el nombre (variante)
+                else if (matcherLineaSagaPeliculaBarra3.matches())
+                {
+                    // Obtiene el nombre del personaje, el poder, la saga o película y la serie de la coincidencia
+                    String personaje = matcherLineaSagaPeliculaBarra3.group(1);
+                    String power = matcherLineaSagaPeliculaBarra3.group(2);
+                    String sagaMovie = matcherLineaSagaPeliculaBarra3.group(3);
+                    String series = matcherLineaSagaPeliculaBarra3.group(4);
+
+                    // Crea un objeto DragonBall con la información obtenida
+                    DragonBall dragonBall = new DragonBall(personaje, power, sagaMovie, series);
+
+                    // Si la serie no está presente en el mapa, se agrega una entrada con una nueva TreeMap
+                    if (!mapaSeries.containsKey(series)) 
+                    {
+                        mapaSeries.put(series, new TreeMap<>());
+                    }
+
+                    // Obtiene el mapa de personajes para la serie actual
+                    Map<String, DragonBall> mapaSaga = mapaSeries.get(series);
+
+                    // Agrega el objeto DragonBall al mapa de personajes para la saga o película actual
                     mapaSaga.put(sagaMovie, dragonBall);
                 }
              	else if (matcherLineaPoderNumeroSagaPeliculaBarra.matches())
