@@ -2,27 +2,46 @@ package ies.jandula.dragonBall.main;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ies.jandula.dragonBall.exceptions.DragonBallExceptions;
 import ies.jandula.dragonBall.models.DragonBall;
 
-public class Main
+public class Main 
 {
-    public static void main(String[] args) 
+    public static void main(String[] args) throws IOException, DragonBallExceptions 
     {
         String archivo = "src" + File.separator + "main" + File.separator + "resources" + File.separator+ "DragonBall.csv";
 
         File file = new File(archivo);
+        
+        FileWriter fileWriter = null;
+        
+        PrintWriter printWriter = null;
+        
+        Scanner scanner = null;
                 
         try
         {       
-            Scanner scanner = new Scanner(file);            
+        	fileWriter = new FileWriter("ejercicioDragonBall.txt");
+            
+            printWriter = new PrintWriter(fileWriter);
+            
+            scanner = new Scanner(file);            
                         
-            Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();      
+            Map<String,Map<String,DragonBall>>mapaSeries = new TreeMap<String, Map<String,DragonBall>>();  
+            
+            scanner.nextLine();
             
             while (scanner.hasNextLine())
             {     
@@ -835,63 +854,59 @@ public class Main
            
             }      
             
-            System.out.println("Numero de series: " + mapaSeries.keySet().size() + "(" + mapaSeries.keySet() + ")");
+            printWriter.println("Numero de series: " + mapaSeries.keySet().size() + "(" + mapaSeries.keySet() + ")");
 
-            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet())
+            for (Map.Entry<String, Map<String, DragonBall>> entrada : mapaSeries.entrySet()) 
             {
                 String serie = entrada.getKey();
                 int numSagas = entrada.getValue().size();
                 
-                Map<String, DragonBall> mapaSaga = entrada.getValue() ;
+                Map<String, DragonBall> mapaSaga = entrada.getValue();
                 
-                System.out.println(serie);
-
-                System.out.println("Número de sagas: " + numSagas);                                
+                printWriter.println(serie);
+                printWriter.println("   -   Número de sagas: " + numSagas);                 
                 
-                String personajeMasPoderoso = "";
-                String personajeMasDebil = "";
+                List<DragonBall> listaPoderes = null;
                 
-                float poderMasFuerte = 0;
-                float poderMasDebil = 0;
+                DragonBall personajeMasPoderoso = null;
+                
+                DragonBall personajeMasDebil = null;
                 
                 for (Map.Entry<String, DragonBall> saga : mapaSaga.entrySet())
                 {
-                    String nombreSaga = saga.getKey();
-                    DragonBall personaje = saga.getValue() ;
-
-                    float poderActual = Float.parseFloat(personaje.getPowerLevel().replaceAll("[\",]", "")); 
-
-                    if(poderMasDebil==0 && poderMasFuerte==0)
-                    {
-                    	poderMasDebil=poderActual;
-                    	poderMasFuerte=poderActual;                    	
-                    	
-                    }
-                    
-                    if (poderActual > poderMasFuerte) 
-                    {
-                        poderMasFuerte = poderActual;
-                        personajeMasPoderoso = personaje.getCharacter();
-                    }
-                    
-                    if (poderActual < poderMasDebil) 
-                    {
-                        poderMasDebil = poderActual;
-                        personajeMasDebil = personaje.getCharacter();
-                    }                    
-                    
-                	System.out.println("- Personaje destacados en: " + nombreSaga + ": " + personajeMasPoderoso + ("poderMasFuerte + ")+ personajeMasDebil + "(" + poderMasDebil +")");
-                    
-                }
-                
+	                String nombreSaga = saga.getKey();
+	               
+	                listaPoderes = new ArrayList<>(mapaSaga.values());
+	                
+	                // Ordenar la lista de personajes por su nivel de poder en orden descendente
+	                listaPoderes.sort(Comparator.comparing(DragonBall::getPowerLevel).reversed());
+	                
+	                personajeMasPoderoso = listaPoderes.get(0);
+	                
+	                personajeMasDebil = listaPoderes.get(listaPoderes.size()-1);     
+	              
+	                printWriter.println("   -   Personajes destacados en "+nombreSaga+":"+personajeMasPoderoso.getCharacter()+"("+personajeMasPoderoso.getPowerLevel()+")"+personajeMasDebil.getCharacter()+"("+personajeMasDebil.getPowerLevel()+")");
+	                
+                } 
             }
-            scanner.close();               
+            
+            printWriter.flush();
+            System.out.println("Insertado con exito");
 
         } 
         catch (FileNotFoundException fileNotFoundException) 
         {
+        	String error ="File not found";
             System.out.println(fileNotFoundException.getMessage());
+            throw new DragonBallExceptions(1, error, fileNotFoundException);
         }
+        finally 
+        {
+        	scanner.close();
+        	fileWriter.close();
+        	printWriter.close();
+			
+		}
     }
 }
 
